@@ -3,11 +3,17 @@ module Business
 
     def initialize(context)
       @context = context
-      params.each { |param| set_param(param) }
+      set_params
       setup
     end
 
     def setup
+    end
+
+    def update(updated_context)
+      @context.merge!(updated_context)
+      set_params
+      setup
     end
 
     def perform
@@ -26,8 +32,18 @@ module Business
 
     protected
 
+    def set_params
+      params.each { |param| set_param(param) }
+    end
+
     def set_param(param)
-      instance_variable_set(:"@#{param}", context.fetch(param))
+      if param.is_a?(Hash)
+        param.each do |(key, val)|
+          instance_variable_set(:"@#{key}", context.fetch(key, val))
+        end
+      else
+        instance_variable_set(:"@#{param}", context.fetch(param))
+      end
     end
 
     def defaults

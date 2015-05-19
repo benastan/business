@@ -23,7 +23,7 @@ describe Business do
   class Factory
     include Business
     attr_reader :greeting, :exhaust, :car
-    @params = [ :name, :sound ]
+    @params = [ :name, sound: 'Vroom' ]
     @defaults = [ :create_car, :drive ]
     
     def create_car
@@ -46,17 +46,16 @@ describe Business do
     end
   end
 
-  subject{Factory}
-
   specify do
-    factory = Factory.perform(name: 'Bentley', sound: 'Vroom')
+    factory = Factory.perform(name: 'Bentley')
     expect(factory.greeting).to eq 'Hello! My name is Bentley'
     expect(factory.exhaust).to eq 'Vroom! Vroom!'
 
-    factory = Factory::CreateCar.perform(name: 'Tesla', sound: 'Jingle')
+    factory = Factory::CreateCar.perform(name: 'Tesla')
     expect(factory.greeting).to eq 'Hello! My name is Tesla'
     expect(factory.exhaust).to be_nil
 
+    factory.update(sound: 'Jingle')
     factory.drive
     expect(factory.exhaust).to eq 'Jingle! Jingle!'
     expect(factory.car.gas).to eq 99
