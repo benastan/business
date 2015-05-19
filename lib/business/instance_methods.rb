@@ -16,8 +16,8 @@ module Business
       setup
     end
 
-    def perform
-      defaults.each { |param| send(param) }
+    def call
+      default_calls.each { |param| send(param) }
       self
     end
 
@@ -46,8 +46,8 @@ module Business
       end
     end
 
-    def defaults
-      self.class.instance_variable_get(:@defaults)
+    def default_calls
+      self.class.instance_variable_get(:@call)
     end
 
     def params

@@ -1,7 +1,7 @@
 module Business
   module ClassMethods
-    def perform(context)
-      new(context).perform
+    def call(context)
+      new(context).call
     end
 
     def const_missing(const_name)

@@ -24,7 +24,7 @@ describe Business do
     include Business
     attr_reader :greeting, :exhaust, :car
     @params = [ :name, sound: 'Vroom' ]
-    @defaults = [ :create_car, :drive ]
+    @call = [ :create_car, :drive ]
     
     def create_car
       @car = Car.new(@name)
@@ -47,11 +47,11 @@ describe Business do
   end
 
   specify do
-    factory = Factory.perform(name: 'Bentley')
+    factory = Factory.call(name: 'Bentley')
     expect(factory.greeting).to eq 'Hello! My name is Bentley'
     expect(factory.exhaust).to eq 'Vroom! Vroom!'
 
-    factory = Factory::CreateCar.perform(name: 'Tesla')
+    factory = Factory::CreateCar.call(name: 'Tesla')
     expect(factory.greeting).to eq 'Hello! My name is Tesla'
     expect(factory.exhaust).to be_nil
 
@@ -60,7 +60,7 @@ describe Business do
     expect(factory.exhaust).to eq 'Jingle! Jingle!'
     expect(factory.car.gas).to eq 99
 
-    Factory::Tow.perform(factory)
+    Factory::Tow.call(factory)
     expect(factory.car.window).to eq :broken
     expect(factory).to_not be_success
     expect(factory.message).to eq 'Oh Noes!'
@@ -71,7 +71,7 @@ describe Business do
       expect(e.message).to eq 'uninitialized constant Factory::Plow'
     end
 
-    Factory::FloorIt.perform(factory)
+    Factory::FloorIt.call(factory)
     expect(factory.car.gas).to eq 90
   end
 end

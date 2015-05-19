@@ -7,7 +7,7 @@ module Business
       @method = @business.instance_method(@method_name)
     end
 
-    def perform(context)
+    def call(context)
       business = context.is_a?(Hash) ? @business.new(context) : context
       __setobj__(business)
       business.send(@method_name)
